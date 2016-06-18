@@ -1,48 +1,33 @@
-#load "recognition.fsx"
+#load "Recognition.fsx"
+#load "DataImporter.fsx"
+
 open Recognition
-
-// Test while implementation    
-Array.iter print validationData.[0..2]
-
-
-// Testen Sie Ihre Funktion mit Array.iter print validationData
-Array.iter print validationData
-
-////////////////////
-// Trainingsfield //
-////////////////////
-
-
-printIndexedData trainingData 200 50
-
-dist (gdai 235) (gdai 231)
-
-let sample = gdai 236
-print (gdrai 236)
-
-findNearestN dist 20 sample trainingData |> Array.map (fun x -> print x)
+open DataImporter
 
 
 
+let trainingData = importTrainingData "data/train_kaggle.csv"
+let testData = importTestData "data/test_kaggle.csv"
 
 
-print (gdrai 231)
-    
+//helper function to guess the data
+let guessNumberWithPredefinedFunctions n testDataId =
+    guessNumber findNearestN compareNumber n (snd testData.[testDataId]) trainingData
 
 
-
-let x = (1, "foo")
-let (a',b') = x
-
-
-let (a,b) = validationData.[0]
-b |> Array.chunkBySize 4
-
-let foo = 2
-
-let add x y = x + y
-
-let myList = [1..5]
-Array.fold2 (fun currentVal x y -> currentVal + x + y) 0 b
+//run
+guessNumberWithPredefinedFunctions 100 23
 
 
+//Write to csv
+// open System
+// open System.IO
+
+// let dataWriter path =
+//     File.WriteAllLines(path, Array.map (fun x -> (string) x) [|1..100|])
+
+// let guessNumberForAllTestData = 
+//     guessNumber findNearestN compareNumber
+//     Array.mapi (fun id x -> (id, fst x.[0]) 
+
+// dataWriter "/tmp/foo.csv"
